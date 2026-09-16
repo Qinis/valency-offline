@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>VALENCY — OFFLINE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: clamp(24px, 5vh, 48px) 20px;
+            text-align: center;
+        }
+
+        header, main, footer {
+            animation: fadeInUp 0.7s ease both;
+        }
+
+        main {
+            animation-delay: 0.12s;
+        }
+
+        footer {
+            animation-delay: 0.24s;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-8px); }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        header {
+            margin-top: clamp(10px, 3vh, 30px);
+            width: 100%;
+        }
+
+        .brand-logo {
+            font-size: clamp(1.8rem, 7vw, 3rem);
+            font-weight: 900;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            text-indent: 0.35em;
+            width: 100%;
+        }
+
+        main {
+            max-width: 440px;
+            width: 100%;
+            padding: 0 10px;
+        }
+
+        h1 {
+            font-size: clamp(1.5rem, 5.5vw, 2.2rem);
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            line-height: 1.15;
+            margin-bottom: 14px;
+        }
+
+        p {
+            color: #888888;
+            font-size: clamp(0.75rem, 2.8vw, 0.85rem);
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .notify-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .notify-form input[type="email"] {
+            width: 100%;
+            height: 52px;
+            padding: 0 16px;
+            background-color: #0d0d0d;
+            border: 1px solid #262626;
+            border-radius: 0;
+            color: #ffffff;
+            /* 16px on mobile prevents auto-zoom on iOS inputs */
+            font-size: 16px; 
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            outline: none;
+            text-align: center;
+            -webkit-appearance: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .notify-form input[type="email"]:focus {
+            border-color: #ffffff;
+        }
+
+        .notify-form input[type="email"]::placeholder {
+            color: #444444;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+        }
+
+        .notify-form button {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            height: 52px;
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            border-radius: 0;
+            font-size: 0.8rem;
+            font-weight: 900;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: pointer;
+            -webkit-appearance: none;
+            transition: background-color 0.2s ease, opacity 0.2s ease;
+        }
+
+        .notify-form.loading button {
+            cursor: default;
+        }
+
+        .btn-label,
+        .btn-loader {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.2s ease;
+        }
+
+        .btn-loader {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .notify-form.loading .btn-label {
+            opacity: 0;
+        }
+
+        .notify-form.loading .btn-loader {
+            opacity: 1;
+        }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            margin-right: 10px;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 0, 0, 0.2);
+            border-top-color: #000000;
+            animation: spin 0.7s linear infinite;
+        }
+
+        .notify-form button:active {
+            opacity: 0.8;
+        }
+
+        .notify-form.form-sent {
+            animation: fadeOut 0.4s ease both;
+        }
+
+        footer {
+            color: #444444;
+            font-size: clamp(0.55rem, 2vw, 0.65rem);
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            padding-bottom: clamp(5px, 2vh, 15px);
+        }
+
+        .form-status {
+            display: none;
+        }
+
+        .form-status[data-fs-active] {
+            display: block;
+            margin-top: 12px;
+            font-size: clamp(0.75rem, 2.8vw, 0.85rem);
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            line-height: 1.6;
+        }
+
+        .form-status[data-fs-success][data-fs-active] {
+            color: #ffffff;
+            animation: fadeInUp 0.5s ease both;
+        }
+
+        .form-status[data-fs-error][data-fs-active] {
+            color: #ff4d4d;
+            min-height: 1.6em;
+        }
+
+        .field-error {
+            display: none;
+            font-size: 0.7rem;
+            color: #ff4d4d;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            line-height: 1.5;
+        }
+
+        .field-error[data-fs-active] {
+            display: block;
+        }
+
+        /* Desktop Adjustments */
+        @media (min-width: 768px) {
+            .notify-form input[type="email"] {
+                font-size: 0.8rem;
+            }
+            
+            .notify-form button:hover:not(:disabled) {
+                background-color: #e6e6e6;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-logo">VALENCY</div>
+    </header>
+
+    <main>
+        <h1>UPGRADING THE VAULT</h1>
+        
+        <p>
+            We are currently preparing the next drop. Access is restricted. Enter your email for early password access.
+        </p>
+
+        <div class="form-status" data-fs-success>YOU'RE ON THE LIST — WATCH YOUR INBOX.</div>
+        <div class="form-status error" data-fs-error></div>
+
+        <form class="notify-form" id="notify-form" action="https://formspree.io/f/mnpnaewv" method="POST">
+            <input type="email" name="email" placeholder="ENTER YOUR EMAIL ADDRESS" required autocomplete="email" data-fs-field>
+            <span class="field-error" data-fs-error="email"></span>
+            <button type="submit" data-fs-submit-btn>
+                <span class="btn-label">REQUEST ACCESS</span>
+                <span class="btn-loader">
+                    <span class="spinner" aria-hidden="true"></span>
+                    <span>REQUESTING ACCESS</span>
+                </span>
+            </button>
+        </form>
+    </main>
+
+    <footer>
+        &copy; 2026 VALENCY. ALL RIGHTS RESERVED.
+    </footer>
+
+<script>
+        window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+        formspree('initForm', {
+            formElement: '#notify-form',
+            formId: 'mnpnaewv',
+            useDefaultStyles: false,
+            disable: (context) => {
+                context.form.setAttribute('aria-busy', 'true');
+                context.form.classList.add('loading');
+                const btn = context.form.querySelector('[type="submit"]');
+                if (btn) btn.disabled = true;
+            },
+            enable: (context) => {
+                context.form.removeAttribute('aria-busy');
+                context.form.classList.remove('loading');
+                const btn = context.form.querySelector('[type="submit"]');
+                if (btn) btn.disabled = false;
+            },
+            onSuccess: (context) => {
+                const form = context.form;
+                form.classList.add('form-sent');
+                setTimeout(() => { form.style.display = 'none'; }, 400);
+            }
+        });
+    </script>
+    <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
+
+</body>
+</html>
