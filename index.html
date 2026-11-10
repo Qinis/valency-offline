@@ -1,291 +1,195 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full bg-white text-black">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <title>VALENCY — OFFLINE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VALENCY — Restricted Access</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    letterSpacing: {
+                        widest: '0.35em',
+                        ultra: '0.6em',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html, body {
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-            background-color: #000000;
-            color: #ffffff;
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            padding: clamp(24px, 5vh, 48px) 20px;
-            text-align: center;
-        }
-
-        header, main, footer {
-            animation: fadeInUp 0.7s ease both;
-        }
-
-        main {
-            animation-delay: 0.12s;
-        }
-
-        footer {
-            animation-delay: 0.24s;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(16px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeOut {
-            from { opacity: 1; transform: translateY(0); }
-            to { opacity: 0; transform: translateY(-8px); }
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        header {
-            margin-top: clamp(10px, 3vh, 30px);
-            width: 100%;
-        }
-
-        .brand-logo {
-            font-size: clamp(1.8rem, 7vw, 3rem);
-            font-weight: 900;
-            letter-spacing: 0.35em;
-            text-transform: uppercase;
-            text-indent: 0.35em;
-            width: 100%;
-        }
-
-        main {
-            max-width: 440px;
-            width: 100%;
-            padding: 0 10px;
-        }
-
-        h1 {
-            font-size: clamp(1.5rem, 5.5vw, 2.2rem);
-            font-weight: 900;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            line-height: 1.15;
-            margin-bottom: 14px;
-        }
-
-        p {
-            color: #888888;
-            font-size: clamp(0.75rem, 2.8vw, 0.85rem);
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-            line-height: 1.6;
-            margin-bottom: 28px;
-        }
-
-        .notify-form {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            width: 100%;
-        }
-
-        .notify-form input[type="email"] {
-            width: 100%;
-            height: 52px;
-            padding: 0 16px;
-            background-color: #0d0d0d;
-            border: 1px solid #262626;
-            border-radius: 0;
-            color: #ffffff;
-            /* 16px on mobile prevents auto-zoom on iOS inputs */
-            font-size: 16px; 
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            outline: none;
-            text-align: center;
-            -webkit-appearance: none;
-            transition: border-color 0.2s ease;
-        }
-
-        .notify-form input[type="email"]:focus {
-            border-color: #ffffff;
-        }
-
-        .notify-form input[type="email"]::placeholder {
-            color: #444444;
-            font-size: 0.75rem;
-            letter-spacing: 0.1em;
-        }
-
-        .notify-form button {
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            height: 52px;
-            background-color: #ffffff;
-            color: #000000;
-            border: none;
-            border-radius: 0;
-            font-size: 0.8rem;
-            font-weight: 900;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            cursor: pointer;
-            -webkit-appearance: none;
-            transition: background-color 0.2s ease, opacity 0.2s ease;
-        }
-
-        .notify-form.loading button {
-            cursor: default;
-        }
-
-        .btn-label,
-        .btn-loader {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.2s ease;
-        }
-
-        .btn-loader {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .notify-form.loading .btn-label {
-            opacity: 0;
-        }
-
-        .notify-form.loading .btn-loader {
-            opacity: 1;
-        }
-
-        .spinner {
-            width: 16px;
-            height: 16px;
-            margin-right: 10px;
-            border-radius: 50%;
-            border: 2px solid rgba(0, 0, 0, 0.2);
-            border-top-color: #000000;
-            animation: spin 0.7s linear infinite;
-        }
-
-        .notify-form button:active {
-            opacity: 0.8;
-        }
-
-        .notify-form.form-sent {
-            animation: fadeOut 0.4s ease both;
-        }
-
-        footer {
-            color: #444444;
-            font-size: clamp(0.55rem, 2vw, 0.65rem);
-            font-weight: 600;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            padding-bottom: clamp(5px, 2vh, 15px);
-        }
-
-        .form-status {
+        .form-status,
+        .field-error {
             display: none;
         }
 
         .form-status[data-fs-active] {
             display: block;
-            margin-top: 12px;
-            font-size: clamp(0.75rem, 2.8vw, 0.85rem);
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-            line-height: 1.6;
         }
 
         .form-status[data-fs-success][data-fs-active] {
-            color: #ffffff;
-            animation: fadeInUp 0.5s ease both;
+            color: #000000;
         }
 
-        .form-status[data-fs-error][data-fs-active] {
-            color: #ff4d4d;
-            min-height: 1.6em;
-        }
-
-        .field-error {
-            display: none;
-            font-size: 0.7rem;
-            color: #ff4d4d;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            line-height: 1.5;
+        .form-status[data-fs-error][data-fs-active],
+        .field-error[data-fs-active] {
+            color: #b91c1c;
         }
 
         .field-error[data-fs-active] {
             display: block;
         }
-
-        /* Desktop Adjustments */
-        @media (min-width: 768px) {
-            .notify-form input[type="email"] {
-                font-size: 0.8rem;
-            }
-            
-            .notify-form button:hover:not(:disabled) {
-                background-color: #e6e6e6;
-            }
-        }
     </style>
 </head>
-<body>
+<body class="h-full font-sans antialiased bg-white text-black flex flex-col justify-between selection:bg-black selection:text-white">
 
-    <header>
-        <div class="brand-logo">VALENCY</div>
+    <!-- Header Section -->
+    <header class="w-full pt-12 pb-6 px-8 sm:px-16 flex justify-center items-center border-b border-black text-center">
+        <!-- Brand Wordmark (Centered) -->
+        <h1 class="font-mono text-2xl sm:text-3xl tracking-ultra uppercase text-black font-medium">
+            VALENCY
+        </h1>
     </header>
 
-    <main>
-        <h1>UPGRADING THE VAULT</h1>
-        
-        <p>
-            We are currently preparing the next drop. Access is restricted. Enter your email for early password access.
-        </p>
+    <!-- Main Content Area -->
+    <main class="w-full max-w-lg mx-auto px-6 py-16 flex-grow flex flex-col justify-center">
 
-        <div class="form-status" data-fs-success>YOU'RE ON THE LIST — WATCH YOUR INBOX.</div>
-        <div class="form-status error" data-fs-error></div>
+        <!-- Header Text Block -->
+        <div class="mb-12 text-center space-y-4">
+            <h2 class="text-3xl sm:text-4xl font-light text-black tracking-tight leading-none uppercase font-mono">
+                UPGRADING THE VAULT
+            </h2>
+            <p class="text-xs sm:text-sm text-neutral-600 font-light leading-relaxed max-w-md mx-auto">
+                Access is restricted to Premium Members only. Leave your email to hear when the VALENCY vault reopens.
+            </p>
+        </div>
 
-        <form class="notify-form" id="notify-form" action="https://formspree.io/f/mnpnaewv" method="POST">
-            <input type="email" name="email" placeholder="ENTER YOUR EMAIL ADDRESS" required autocomplete="email" data-fs-field>
-            <span class="field-error" data-fs-error="email"></span>
-            <button type="submit" data-fs-submit-btn>
-                <span class="btn-label">REQUEST ACCESS</span>
-                <span class="btn-loader">
-                    <span class="spinner" aria-hidden="true"></span>
-                    <span>REQUESTING ACCESS</span>
-                </span>
+        <!-- Mode Switcher Tabs -->
+        <div class="flex border-b border-neutral-300 mb-8 font-mono text-xs tracking-wider">
+            <button
+                id="tab-pass"
+                onclick="switchTab('pass')"
+                class="pb-3 pr-6 text-black border-b-2 border-black font-semibold transition-all duration-200 uppercase"
+            >
+                Enter Password
             </button>
-        </form>
+            <button
+                id="tab-request"
+                onclick="switchTab('request')"
+                class="pb-3 px-6 text-neutral-400 border-b-2 border-transparent hover:text-black transition-all duration-200 uppercase"
+            >
+                Request Access
+            </button>
+        </div>
+
+        <!-- View 1: Password Unlock Form -->
+        <div id="view-pass" class="space-y-6">
+            <div class="space-y-2">
+                <label for="password-input" class="block text-[10px] font-mono uppercase tracking-widest text-black">
+                    Passcode Key
+                </label>
+                <input
+                    type="password"
+                    id="password-input"
+                    disabled
+                    placeholder="ENTER PASSCODE"
+                    class="w-full bg-white border border-black rounded-none px-4 py-4 text-xs text-black placeholder-neutral-400 focus:outline-none focus:ring-1 focus:ring-black transition-all font-mono tracking-widest uppercase"
+                />
+            </div>
+
+            <button
+                type="button"
+                id="btn-unlock"
+                disabled
+                class="w-full bg-black hover:bg-neutral-800 text-white font-mono text-xs font-medium uppercase tracking-widest py-4 px-6 rounded-none transition-all duration-200"
+            >
+                ENTER VAULT
+            </button>
+
+            <div class="flex justify-between items-center text-[10px] font-mono text-neutral-500 pt-1">
+                <span>STATUS: LOCKED</span>
+            </div>
+        </div>
+
+        <!-- View 2: Request Access Form -->
+        <div id="view-request" class="space-y-6 hidden">
+            <div class="form-status" data-fs-success>YOU'RE ON THE LIST — WATCH YOUR INBOX.</div>
+            <div class="form-status" data-fs-error></div>
+
+            <form action="https://formspree.io/f/mnpnaewv" method="POST" class="space-y-6" id="notify-form">
+            <div class="space-y-2">
+                <label for="email-input" class="block text-[10px] font-mono uppercase tracking-widest text-black">
+                    Email Address
+                </label>
+                <input
+                    type="email"
+                    id="email-input"
+                    name="email"
+                    required
+                    autocomplete="email"
+                    placeholder="NAME@DOMAIN.COM"
+                    data-fs-field
+                    class="w-full bg-white border border-black rounded-none px-4 py-4 text-xs text-black placeholder-neutral-400 focus:outline-none focus:ring-1 focus:ring-black transition-all font-mono tracking-wider uppercase"
+                />
+                <span class="field-error" data-fs-error="email"></span>
+            </div>
+
+            <button
+                type="submit"
+                id="btn-request"
+                data-fs-submit-btn
+                class="w-full bg-black hover:bg-neutral-800 text-white font-mono text-xs font-medium uppercase tracking-widest py-4 px-6 rounded-none transition-all duration-200"
+            >
+                STAY UPDATED
+            </button>
+
+            <p class="text-[10px] font-mono text-neutral-500 uppercase">
+                SIGN UP FOR UPDATES FROM VALENCY.
+            </p>
+            </form>
+        </div>
+
     </main>
 
-    <footer>
-        &copy; 2026 VALENCY. ALL RIGHTS RESERVED.
+    <!-- Footer Section -->
+    <footer class="w-full py-8 px-8 text-center border-t border-neutral-200">
+        <p class="font-mono text-[10px] tracking-widest text-black uppercase">
+            © 2026 VALENCY. ALL RIGHTS RESERVED.
+        </p>
     </footer>
 
-<script>
+    <!-- Interactive Logic Script -->
+    <script>
+        function switchTab(mode) {
+            const passView = document.getElementById('view-pass');
+            const reqView = document.getElementById('view-request');
+            const passTab = document.getElementById('tab-pass');
+            const reqTab = document.getElementById('tab-request');
+
+            if (mode === 'pass') {
+                passView.classList.remove('hidden');
+                reqView.classList.add('hidden');
+
+                passTab.className = "pb-3 pr-6 text-black border-b-2 border-black font-semibold transition-all duration-200 uppercase";
+                reqTab.className = "pb-3 px-6 text-neutral-400 border-b-2 border-transparent hover:text-black transition-all duration-200 uppercase";
+            } else {
+                reqView.classList.remove('hidden');
+                passView.classList.add('hidden');
+
+                reqTab.className = "pb-3 px-6 text-black border-b-2 border-black font-semibold transition-all duration-200 uppercase";
+                passTab.className = "pb-3 pr-6 text-neutral-400 border-b-2 border-transparent hover:text-black transition-all duration-200 uppercase";
+            }
+        }
+
         window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
         formspree('initForm', {
             formElement: '#notify-form',
@@ -293,24 +197,19 @@
             useDefaultStyles: false,
             disable: (context) => {
                 context.form.setAttribute('aria-busy', 'true');
-                context.form.classList.add('loading');
                 const btn = context.form.querySelector('[type="submit"]');
                 if (btn) btn.disabled = true;
             },
             enable: (context) => {
                 context.form.removeAttribute('aria-busy');
-                context.form.classList.remove('loading');
                 const btn = context.form.querySelector('[type="submit"]');
                 if (btn) btn.disabled = false;
             },
             onSuccess: (context) => {
-                const form = context.form;
-                form.classList.add('form-sent');
-                setTimeout(() => { form.style.display = 'none'; }, 400);
+                context.form.hidden = true;
             }
         });
     </script>
     <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
-
 </body>
 </html>

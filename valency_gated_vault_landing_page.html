@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-white text-black">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VALENCY — Restricted Access</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    letterSpacing: {
+                        widest: '0.35em',
+                        ultra: '0.6em',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        .form-status,
+        .field-error {
+            display: none;
+        }
+
+        .form-status[data-fs-active] {
+            display: block;
+        }
+
+        .form-status[data-fs-success][data-fs-active] {
+            color: #000000;
+        }
+
+        .form-status[data-fs-error][data-fs-active],
+        .field-error[data-fs-active] {
+            color: #b91c1c;
+        }
+
+        .field-error[data-fs-active] {
+            display: block;
+        }
+    </style>
+</head>
+<body class="h-full font-sans antialiased bg-white text-black flex flex-col justify-between selection:bg-black selection:text-white">
+
+    <!-- Header Section -->
+    <header class="w-full pt-12 pb-6 px-8 sm:px-16 flex justify-center items-center border-b border-black text-center">
+        <!-- Brand Wordmark (Centered) -->
+        <h1 class="font-mono text-2xl sm:text-3xl tracking-ultra uppercase text-black font-medium">
+            VALENCY
+        </h1>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="w-full max-w-lg mx-auto px-6 py-16 flex-grow flex flex-col justify-center">
+
+        <!-- Header Text Block -->
+        <div class="mb-12 text-center space-y-4">
+            <h2 class="text-3xl sm:text-4xl font-light text-black tracking-tight leading-none uppercase font-mono">
+                UPGRADING THE VAULT
+            </h2>
+            <p class="text-xs sm:text-sm text-neutral-600 font-light leading-relaxed max-w-md mx-auto">
+                Access is restricted to Premium Members only. Leave your email to hear when the VALENCY vault reopens.
+            </p>
+        </div>
+
+        <!-- Mode Switcher Tabs -->
+        <div class="flex border-b border-neutral-300 mb-8 font-mono text-xs tracking-wider">
+            <button
+                id="tab-pass"
+                onclick="switchTab('pass')"
+                class="pb-3 pr-6 text-black border-b-2 border-black font-semibold transition-all duration-200 uppercase"
+            >
+                Enter Password
+            </button>
+            <button
+                id="tab-request"
+                onclick="switchTab('request')"
+                class="pb-3 px-6 text-neutral-400 border-b-2 border-transparent hover:text-black transition-all duration-200 uppercase"
+            >
+                Request Access
+            </button>
+        </div>
+
+        <!-- View 1: Password Unlock Form -->
+        <div id="view-pass" class="space-y-6">
+            <div class="space-y-2">
+                <label for="password-input" class="block text-[10px] font-mono uppercase tracking-widest text-black">
+                    Passcode Key
+                </label>
+                <input
+                    type="password"
+                    id="password-input"
+                    disabled
+                    placeholder="ENTER PASSCODE"
+                    class="w-full bg-white border border-black rounded-none px-4 py-4 text-xs text-black placeholder-neutral-400 focus:outline-none focus:ring-1 focus:ring-black transition-all font-mono tracking-widest uppercase"
+                />
+            </div>
+
+            <button
+                type="button"
+                id="btn-unlock"
+                disabled
+                class="w-full bg-black hover:bg-neutral-800 text-white font-mono text-xs font-medium uppercase tracking-widest py-4 px-6 rounded-none transition-all duration-200"
+            >
+                ENTER VAULT
+            </button>
+
+            <div class="flex justify-between items-center text-[10px] font-mono text-neutral-500 pt-1">
+                <span>STATUS: LOCKED</span>
+            </div>
+        </div>
+
+        <!-- View 2: Request Access Form -->
+        <div id="view-request" class="space-y-6 hidden">
+            <div class="form-status" data-fs-success>YOU'RE ON THE LIST — WATCH YOUR INBOX.</div>
+            <div class="form-status" data-fs-error></div>
+
+            <form action="https://formspree.io/f/mnpnaewv" method="POST" class="space-y-6" id="notify-form">
+            <div class="space-y-2">
+                <label for="email-input" class="block text-[10px] font-mono uppercase tracking-widest text-black">
+                    Email Address
+                </label>
+                <input
+                    type="email"
+                    id="email-input"
+                    name="email"
+                    required
+                    autocomplete="email"
+                    placeholder="NAME@DOMAIN.COM"
+                    data-fs-field
+                    class="w-full bg-white border border-black rounded-none px-4 py-4 text-xs text-black placeholder-neutral-400 focus:outline-none focus:ring-1 focus:ring-black transition-all font-mono tracking-wider uppercase"
+                />
+                <span class="field-error" data-fs-error="email"></span>
+            </div>
+
+            <button
+                type="submit"
+                id="btn-request"
+                data-fs-submit-btn
+                class="w-full bg-black hover:bg-neutral-800 text-white font-mono text-xs font-medium uppercase tracking-widest py-4 px-6 rounded-none transition-all duration-200"
+            >
+                STAY UPDATED
+            </button>
+
+            <p class="text-[10px] font-mono text-neutral-500 uppercase">
+                SIGN UP FOR UPDATES FROM VALENCY.
+            </p>
+            </form>
+        </div>
+
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="w-full py-8 px-8 text-center border-t border-neutral-200">
+        <p class="font-mono text-[10px] tracking-widest text-black uppercase">
+            © 2026 VALENCY. ALL RIGHTS RESERVED.
+        </p>
+    </footer>
+
+    <!-- Interactive Logic Script -->
+    <script>
+        function switchTab(mode) {
+            const passView = document.getElementById('view-pass');
+            const reqView = document.getElementById('view-request');
+            const passTab = document.getElementById('tab-pass');
+            const reqTab = document.getElementById('tab-request');
+
+            if (mode === 'pass') {
+                passView.classList.remove('hidden');
+                reqView.classList.add('hidden');
+
+                passTab.className = "pb-3 pr-6 text-black border-b-2 border-black font-semibold transition-all duration-200 uppercase";
+                reqTab.className = "pb-3 px-6 text-neutral-400 border-b-2 border-transparent hover:text-black transition-all duration-200 uppercase";
+            } else {
+                reqView.classList.remove('hidden');
+                passView.classList.add('hidden');
+
+                reqTab.className = "pb-3 px-6 text-black border-b-2 border-black font-semibold transition-all duration-200 uppercase";
+                passTab.className = "pb-3 pr-6 text-neutral-400 border-b-2 border-transparent hover:text-black transition-all duration-200 uppercase";
+            }
+        }
+
+        window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+        formspree('initForm', {
+            formElement: '#notify-form',
+            formId: 'mnpnaewv',
+            useDefaultStyles: false,
+            disable: (context) => {
+                context.form.setAttribute('aria-busy', 'true');
+                const btn = context.form.querySelector('[type="submit"]');
+                if (btn) btn.disabled = true;
+            },
+            enable: (context) => {
+                context.form.removeAttribute('aria-busy');
+                const btn = context.form.querySelector('[type="submit"]');
+                if (btn) btn.disabled = false;
+            },
+            onSuccess: (context) => {
+                context.form.hidden = true;
+            }
+        });
+    </script>
+    <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
+</body>
+</html>
